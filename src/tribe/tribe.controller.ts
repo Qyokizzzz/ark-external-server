@@ -2,68 +2,45 @@ import {
   Controller,
   Get,
   Query,
-  Res,
   HttpStatus,
   HttpException,
+  Inject,
 } from '@nestjs/common';
-import { Response } from 'express';
-import { WechatyBuilder } from 'wechaty';
-import { TribeService } from './tribe.service';
 import { UserService } from '../user/user.service';
-
-const wechaty = WechatyBuilder.build({
-  puppet: 'wechaty-puppet-wechat4u',
-  puppetOptions: {
-    uos: true,
-  },
-});
-
-wechaty
-  .on('scan', (qrcode, status) =>
-    console.log(
-      `Scan QR Code to login: ${status}\nhttps://wechaty.js.org/qrcode/${encodeURIComponent(
-        qrcode,
-      )}`,
-    ),
-  )
-  .on('login', (user) => console.log(`User ${user} logged in`))
-  .on('message', (message) => console.log(`Message: ${message}`));
-
-wechaty.start();
+import type { WechatyInterface } from 'wechaty/impls';
 
 @Controller('tribe')
 export class TribeController {
   constructor(
-    private readonly tribeService: TribeService,
     private readonly userService: UserService,
+    @Inject('WECHATY') private readonly wechaty: WechatyInterface,
   ) {}
 
   @Get('log')
-  async log(
-    @Query() query: { map: string; tribe: string; msg: string },
-    @Res() res: Response,
-  ) {
+  async log(@Query() query: { map: string; tribe: string; msg: string }) {
     const { map, tribe, msg } = query;
 
-    const expired = await this.tribeService.expired(map, tribe);
+    const expired = await this.userService.expired(map, tribe);
     if (expired) {
       throw new HttpException('服务已过期', HttpStatus.UNAUTHORIZED);
     }
 
     const users = await this.userService.findUserByTribe(map, tribe);
-    console.log(users);
-    const contacts = await wechaty.Contact.findAll();
-    console.log(contacts);
-    contacts.forEach((contact) => {
-      console.log(contact.payload);
-      contact.say(msg);
+    users.forEach((user) => {
+      this.wechaty.Contact.findAll({ alias: user.wechatAlias }).then(
+        (contacts) => {
+          console.log(contacts);
+          contacts?.forEach((contact) => contact.say(msg)); // 处理同地图同部落重名的情况
+        },
+      );
     });
-    res.status(HttpStatus.OK);
+
+    return 'ok';
   }
 
   @Get('getFriends')
-  async getFriends(@Res() res: Response) {
-    const friends = await wechaty.Contact.findAll();
-    res.status(HttpStatus.OK).json(friends);
+  async getFriends() {
+    const friends = await this.wechaty.Contact.findAll();
+    return friends;
   }
 }
