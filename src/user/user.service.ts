@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
 import { IUser } from './user.interface';
-// import type { WhereOptions } from 'sequelize';
+import type { WhereOptions } from 'sequelize';
 
 @Injectable()
 export class UserService {
@@ -32,9 +32,9 @@ export class UserService {
     return record?.expiredAt ? new Date(record.expiredAt) < new Date() : false;
   }
 
-  async index(params: IUser) {
+  async index(params: WhereOptions<IUser>) {
     const users = this.UserModel.findAll({
-      where: params as any,
+      where: params,
     });
     return users;
   }

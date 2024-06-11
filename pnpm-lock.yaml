@@ -17,6 +17,9 @@ dependencies:
   '@nestjs/sequelize':
     specifier: ^10.0.1
     version: 10.0.1(@nestjs/common@10.3.8)(@nestjs/core@10.3.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)(sequelize-typescript@2.1.6)(sequelize@6.37.3)
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   mysql2:
     specifier: ^3.10.0
     version: 3.10.0
@@ -55,6 +58,9 @@ devDependencies:
   '@types/jest':
     specifier: ^29.5.2
     version: 29.5.12
+  '@types/lodash':
+    specifier: ^4.17.5
+    version: 4.17.5
   '@types/node':
     specifier: ^20.3.1
     version: 20.14.0
@@ -1823,8 +1829,8 @@ packages:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
 
-  /@types/lodash@4.17.4:
-    resolution: {integrity: sha512-wYCP26ZLxaT3R39kiN2+HcJ4kTd3U1waI/cY7ivWYqFP6pW3ZNpvi6Wd6PHZx7T/t8z0vlkXMg3QYLa7DZ/IJQ==}
+  /@types/lodash@4.17.5:
+    resolution: {integrity: sha512-MBIOHVZqVqgfro1euRDWX7OO0fBVUUMrN6Pwm8LQsz8cWhEpihlvR70ENj3f40j58TNxZaWv2ndSkInykNBBJw==}
     dev: true
 
   /@types/methods@1.1.4:
@@ -1876,7 +1882,7 @@ packages:
     dependencies:
       '@types/bluebird': 3.5.42
       '@types/continuation-local-storage': 3.2.7
-      '@types/lodash': 4.17.4
+      '@types/lodash': 4.17.5
       '@types/validator': 13.11.10
     dev: true
 
