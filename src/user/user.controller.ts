@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Get, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Query,
+  Put,
+  Delete,
+  Param,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { omitBy, isUndefined } from 'lodash';
 import type { IUser } from './user.interface';
@@ -55,5 +64,19 @@ export class UserController {
     });
 
     return user;
+  }
+
+  @Put()
+  async update(@Body() body: IUser[]) {
+    const tasks = body.map((user) => this.userService.update(user));
+    const users = await Promise.all(tasks);
+    return users;
+  }
+
+  @Delete()
+  async destroy(@Param() params: { id: number }) {
+    const { id } = params;
+    const number = await this.userService.destroy(id);
+    return `成功删除${number}条数据`;
   }
 }

@@ -43,4 +43,19 @@ export class UserService {
     const user = this.UserModel.create(params);
     return user;
   }
+
+  async update(user: IUser) {
+    const { id } = user;
+    const updatedUser = await this.UserModel.update(user, { where: { id } });
+    return updatedUser;
+  }
+
+  async destroy(id: number) {
+    const number = await this.UserModel.destroy({
+      where: {
+        id,
+      },
+    });
+    return number;
+  }
 }
