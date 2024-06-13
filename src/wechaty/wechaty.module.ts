@@ -24,14 +24,15 @@ const wechatyFactory = {
       .on('login', (user) => console.log(`User ${user} logged in`))
       .on('message', (message) => console.log(`Message: ${message}`))
       .on('friendship', async (friendship) => {
-        const hello = friendship.payload?.hello || '';
-        const [map, tribe, arkName, qq] = hello.split(',');
-        const wname = friendship.contact().name();
-
-        if (friendship.type() === 2) {
-          await friendship.accept();
+        switch (friendship.type()) {
+          case wechaty.Friendship.Type.Receive: {
+            const hello = friendship.payload?.hello || '';
+            const [map, tribe, arkName, qq] = hello.split(',');
+            const wname = friendship.contact().name();
+            userService.create({ map, tribe, arkName, qq, wname });
+            friendship.accept();
+          }
         }
-        userService.create({ map, tribe, arkName, qq, wname });
       });
 
     await wechaty.start();
