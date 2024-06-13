@@ -23,7 +23,7 @@ const wechatyFactory = {
       )
       .on('login', (user) => console.log(`User ${user} logged in`))
       .on('message', (message) => console.log(`Message: ${message}`))
-      .on('friendship', async (friendship) => {
+      .on('friendship', (friendship) => {
         switch (friendship.type()) {
           case wechaty.Friendship.Type.Receive: {
             const hello = friendship.payload?.hello || '';
