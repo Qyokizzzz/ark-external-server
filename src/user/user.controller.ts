@@ -22,9 +22,9 @@ export class UserController {
       id,
       map,
       tribe,
-      wechatAlias,
       arkName,
       qq,
+      wname,
       expiredAt,
       createdAt,
       updatedAt,
@@ -35,9 +35,9 @@ export class UserController {
         id,
         map,
         tribe,
-        wechatAlias,
         arkName,
         qq,
+        wname,
         expiredAt,
         createdAt,
         updatedAt,
@@ -51,16 +51,13 @@ export class UserController {
 
   @Post()
   async create(@Body() body: IUser) {
-    const { map, tribe, wechatAlias, arkName, qq } = body;
+    const { map, tribe, arkName, qq, wname } = body;
     const user = await this.userService.create({
       map,
       tribe,
-      wechatAlias,
       arkName,
       qq,
-      expiredAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      wname,
     });
 
     return user;

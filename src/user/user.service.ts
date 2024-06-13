@@ -39,8 +39,15 @@ export class UserService {
     return users;
   }
 
-  async create(params: Omit<IUser, 'id'>) {
-    const user = this.UserModel.create(params);
+  async create(
+    params: Omit<IUser, 'id' | 'expiredAt' | 'createdAt' | 'updatedAt'>,
+  ) {
+    const user = this.UserModel.create({
+      ...params,
+      expiredAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
     return user;
   }
 

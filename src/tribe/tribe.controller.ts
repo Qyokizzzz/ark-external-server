@@ -27,12 +27,12 @@ export class TribeController {
 
     const users = await this.userService.findUserByTribe(map, tribe);
     users.forEach((user) => {
-      this.wechaty.Contact.findAll({ alias: user.wechatAlias }).then(
-        (contacts) => {
-          console.log(contacts);
-          contacts?.forEach((contact) => contact.say(msg)); // 处理同地图同部落重名的情况
-        },
-      );
+      this.wechaty.Contact.findAll({ name: user.wname }).then((contacts) => {
+        // 同部落中可能有成员重名
+        contacts?.forEach((contact) =>
+          contact.say(`${map}----${tribe}----${msg}`),
+        );
+      });
     });
 
     return 'ok';

@@ -28,12 +28,6 @@ export class User extends Model<User, UserCreation> {
     type: DataType.STRING,
     allowNull: false,
   })
-  wechatAlias: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
   arkName: string;
 
   @Column({
@@ -41,6 +35,12 @@ export class User extends Model<User, UserCreation> {
     allowNull: false,
   })
   qq: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  wname: string;
 
   @Column({
     type: DataType.DATE,
