@@ -15,24 +15,28 @@ export class User extends Model<User, UserCreation> {
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    defaultValue: '',
   })
   map: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    defaultValue: '',
   })
   tribe: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    defaultValue: '',
   })
   arkName: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    defaultValue: '',
   })
   qq: string;
 
