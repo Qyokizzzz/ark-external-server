@@ -5,15 +5,15 @@ import {
   DataType,
   BelongsToMany,
 } from 'sequelize-typescript';
-import { Tribe } from 'src/tribe/tribe.model';
+import { User } from 'src/user/user.model';
 import { Relationship } from 'src/relationship/relationship.model';
 import type { Optional } from 'sequelize';
-import type { IUser } from './user.interface';
+import type { ITribe } from './tribe.interface';
 
-type UserCreation = Optional<IUser, 'id'>;
+type TribeCreation = Optional<ITribe, 'id'>;
 
 @Table
-export class User extends Model<User, UserCreation> {
+export class Tribe extends Model<Tribe, TribeCreation> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
@@ -26,21 +26,20 @@ export class User extends Model<User, UserCreation> {
     allowNull: false,
     defaultValue: '',
   })
-  arkName: string;
+  map: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
     defaultValue: '',
   })
-  qq: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
-  wechatName: string;
+  tribeName: string;
 
   @BelongsToMany(() => User, () => Relationship)
-  tribes: Tribe[];
+  users: User[];
+
+  @Column({
+    type: DataType.DATE,
+  })
+  expiredAt: string;
 }

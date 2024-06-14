@@ -18,27 +18,14 @@ export class UserController {
 
   @Get()
   async index(@Query() query: IUser) {
-    const {
-      id,
-      map,
-      tribe,
-      arkName,
-      qq,
-      wname,
-      expiredAt,
-      createdAt,
-      updatedAt,
-    } = query;
+    const { id, arkName, qq, wechatName, createdAt, updatedAt } = query;
 
     const params = omitBy(
       {
         id,
-        map,
-        tribe,
         arkName,
         qq,
-        wname,
-        expiredAt,
+        wechatName,
         createdAt,
         updatedAt,
       },
@@ -51,29 +38,27 @@ export class UserController {
 
   @Post()
   async create(@Body() body: IUser) {
-    const { map, tribe, arkName, qq, wname } = body;
+    const { arkName, qq, wechatName } = body;
     const user = await this.userService.create({
-      map,
-      tribe,
       arkName,
       qq,
-      wname,
+      wechatName,
     });
 
     return user;
   }
 
   @Put()
-  async update(@Body() body: IUser[]) {
-    const tasks = body.map((user) => this.userService.update(user));
-    const users = await Promise.all(tasks);
-    return users;
+  async update(@Body() body: IUser) {
+    const updatedUser = await this.userService.update(body);
+    return updatedUser;
   }
 
   @Delete()
-  async destroy(@Param() params: { id: number }) {
-    const { id } = params;
-    const number = await this.userService.destroy(id);
-    return `成功删除${number}条数据`;
+  async destroy(@Param() params: { idString: string }) {
+    const { idString } = params;
+    const ids = idString.split(',');
+    ids.forEach((id) => this.userService.destroy(+id));
+    return `成功删除${ids.length}条数据`;
   }
 }

@@ -1,7 +1,8 @@
+import { Op, literal } from 'sequelize';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
-import { IUser } from './user.interface';
+import type { IUser } from './user.interface';
 import type { WhereOptions } from 'sequelize';
 
 @Injectable()
@@ -11,43 +12,29 @@ export class UserService {
     private UserModel: typeof User,
   ) {}
 
-  async findUserByTribe(map: string, tribe: string) {
+  async findUserByTribe(map: string, tribeName: string) {
     const users = await this.UserModel.findAll({
       where: {
-        map,
-        tribe,
+        id: {
+          [Op.in]: literal(
+            `(select userId from relationships where tribeId=(select id from tribes where map='${map}' and tribeName='${tribeName}'))`,
+          ),
+        },
       },
     });
 
     return users;
   }
 
-  async expired(map: string, tribe: string) {
-    const record = await this.UserModel.findOne({
-      where: {
-        map,
-        tribe,
-      },
-    });
-    return record?.expiredAt ? new Date(record.expiredAt) < new Date() : false;
-  }
-
   async index(params: WhereOptions<IUser>) {
-    const users = this.UserModel.findAll({
+    const users = await this.UserModel.findAll({
       where: params,
     });
     return users;
   }
 
-  async create(
-    params: Omit<IUser, 'id' | 'expiredAt' | 'createdAt' | 'updatedAt'>,
-  ) {
-    const user = this.UserModel.create({
-      ...params,
-      expiredAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
+  async create(params: Omit<IUser, 'id' | 'createdAt' | 'updatedAt'>) {
+    const [user] = await this.UserModel.findOrCreate({ where: params });
     return user;
   }
 
