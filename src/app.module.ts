@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import config from '../config';
 import { UserModule } from './user/user.module';
 import { TribeModule } from './tribe/tribe.module';
+import config from '../config';
 
 @Module({
   imports: [
