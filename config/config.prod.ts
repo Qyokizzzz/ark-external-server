@@ -7,7 +7,7 @@ export default {
     dialect: 'mysql' as Dialect,
     host: '127.0.0.1',
     port: 3306,
-    database: 'ark_log_prod',
+    database: 'ark_external_db_prod',
     username: 'root',
     password: '198314',
     timezone: '+08:00',
